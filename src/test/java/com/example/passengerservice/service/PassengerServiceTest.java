@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PassengerServiceTest {
 
@@ -29,6 +28,22 @@ public class PassengerServiceTest {
         Optional<Passenger> found = service.findById("P1");
         assertTrue(found.isPresent());
         assertEquals("Anz", found.get().getName());
+    }
+
+    @Test
+    void duplicateIdThrows(){
+        service.create(Passenger.builder()
+                .passengerId("P2")
+                .name("Bob")
+                .email("bob@atu.ie")
+                .build());
+
+        assertThrows(IllegalArgumentException.class, () ->
+                service.create(Passenger.builder()
+                        .passengerId("P2")
+                        .name("Bobby")
+                        .email("bob@gmail.com")
+                        .build()));
     }
 
 
